@@ -1,4 +1,4 @@
-# Howto: Kai´s ELK Environment Running Ubuntu 16.04
+# My own notes on managing my ELK Stack on Ubuntu 16.04
 
 # Starting the ELK Services
 
@@ -20,6 +20,24 @@ CEF:Version|Device Vendor|Device Product|Device Version|Signature ID|Name|Severi
 ## SQL Injection
 
 Nov 24 10:47:25 <local0.info> 192.168.242.250 CEF:0|Citrix|NetScaler|NS12.0|APPFW|APPFW_SQL|6|src=172.16.230.1 spt=25580 method=GET request=http://bwapp.sicra.no/bWAPP/js/html5.js?rApc%3D1401%20AND%201%3D1%20UNION%20ALL%20SELECT%201%2CNULL%2C%27%3Cscript%3Ealert%28%22XSS%22%29%3C%2Fscript%3E%27%2Ctable_name%20FROM%20information_schema.tables%20WHERE%202%3E1--%2F%2A%2A%2F%3B%20EXEC%20xp_cmdshel msg=SQL Wildchar check failed for field rapc\=1401 and 1\=1 union all select 1,null,'&lt;script&gt;alert("xss")&lt;/script&gt;',table_name from information_schema.tables\=".._" cn1=3285 cn2=1940 cs1=fw_prf_bwapp cs2=PPE0 cs3=r9KYlAjXXP6wM9OFJIp7iPJLCI40000 cs4=ALERT cs5=2017 act=not blocked
+
+# Extensions Used in This Message
+src=172.16.230.1 
+spt=25580 
+method=GET 
+request=http://bwapp.sicra.no/bWAPP/js/html5.js?rApc%3D1401%20AND%201%3D1%20UNION%20ALL%20SELECT%201%2CNULL%2C%27%3Cscript%3Ealert%28%22XSS%22%29%3C%2Fscript%3E%27%2Ctable_name%20FROM%20information_schema.tables%20WHERE%202%3E1--%2F%2A%2A%2F%3B%20EXEC%20xp_cmdshel 
+msg=SQL Wildchar check failed for field rapc\=1401 and 1\=1 union all select 1,null,'&lt;script&gt;alert("xss")&lt;/script&gt;',table_name from information_schema.tables\=".._" cn1=3285 
+cn2=1940 
+cs1=fw_prf_bwapp #AppFW Profile Name
+cs2=PPE0  # The Netscaler Packet Processing Engine that processed this HTTP Transaction
+cs3=r9KYlAjXXP6wM9OFJIp7iPJLCI40000 
+cs4=ALERT 
+cs5=2017 
+act=not blocked
+
+
+
+
 
 ## START_URL
 
