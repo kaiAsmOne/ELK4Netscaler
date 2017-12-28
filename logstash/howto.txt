@@ -1,0 +1,30 @@
+# Howto: Kai´s ELK Environment Running Ubuntu 16.04
+
+# Starting the ELK Services
+
+1: sudo systemctl start elasticsearch
+2: sudo systemctl start kibana
+
+# Start the logstash session
+
+sudo /usr/share/logstash/bin/logstash -f ns_cef2.conf
+
+## Example of a CEF Message from ArcSight
+## Definitions consumed: https://kc.mcafee.com/resources/sites/MCAFEE/content/live/CORP_KNOWLEDGEBASE/78000/KB78712/en_US/CEF_White_Paper_20100722.pdf
+
+# From the Standard
+CEF:Version|Device Vendor|Device Product|Device Version|Signature ID|Name|Severity|Extension
+
+## Examples of APPFW Messages pulled straight from ns.log on Netscaler (Syslog Message logging CEF Messages)
+
+## SQL Injection
+
+Nov 24 10:47:25 <local0.info> 192.168.242.250 CEF:0|Citrix|NetScaler|NS12.0|APPFW|APPFW_SQL|6|src=172.16.230.1 spt=25580 method=GET request=http://bwapp.sicra.no/bWAPP/js/html5.js?rApc%3D1401%20AND%201%3D1%20UNION%20ALL%20SELECT%201%2CNULL%2C%27%3Cscript%3Ealert%28%22XSS%22%29%3C%2Fscript%3E%27%2Ctable_name%20FROM%20information_schema.tables%20WHERE%202%3E1--%2F%2A%2A%2F%3B%20EXEC%20xp_cmdshel msg=SQL Wildchar check failed for field rapc\=1401 and 1\=1 union all select 1,null,'&lt;script&gt;alert("xss")&lt;/script&gt;',table_name from information_schema.tables\=".._" cn1=3285 cn2=1940 cs1=fw_prf_bwapp cs2=PPE0 cs3=r9KYlAjXXP6wM9OFJIp7iPJLCI40000 cs4=ALERT cs5=2017 act=not blocked
+
+## START_URL
+
+Dec  4 22:47:12 <local0.info> 192.168.242.250 CEF:0|Citrix|NetScaler|NS12.0|APPFW|APPFW_STARTURL|6|src=172.16.230.1 spt=58836 method=GET request=http://bwapp.sicra.no/bWAPP/sqli_1.php?title\=moccamaster&action\=search&as_sfid\=AAAAAAXN3DeNW34aWA3ndBqnnJ8T4NgVnZhY5z0rJkJHxneskzFSWuxGTqEBtIesfxvfMLuwYVTc-nCFAFF01KnrFOC46s64vBvgrItf_bgDjaIEbtyqCS9xCs7ESNAU6-kLaVU%3D&as_fid\=7d7c3a193c44d33a08442364f59d8c2803fdeb8c&RJMZ%3D1559%20AND%201%3D1%20UNION%20ALL%20SELECT%201%2CNULL%2C%27%3Cscript%3Ealert%28%22XSS%22%29%3C%2Fscript%3E%27%2 msg=Disallow Illegal URL. cn1=903 cn2=181 cs1=fw_prf_bwapp cs2=PPE0 cs3=SSwFICs5o8ImeGE90sAa20aGvwM0000 cs4=ALERT cs5=2017 act=not blocked
+
+## REFERER_HEADER
+
+Nov 24 10:53:26 <local0.info> 192.168.242.250 CEF:0|Citrix|NetScaler|NS12.0|APPFW|APPFW_REFERER_HEADER|6|src=172.16.230.1 spt=52460 method=GET request=https://bwapp.sicra.no/bWAPP/sqli_1.php?title\=Cookie_Prot&action\=search&DuZl%3D4372%20AND%201%3D1%20UNION%20ALL%20SELECT%201%2CNULL%2C%27%3Cscript%3Ealert%28%22XSS%22%29%3C%2Fscript%3E%27%2Ctable_name%20FROM%20information_schema.tables%20WHERE%202%3E1--%2F%2A%2A%2F%3B%20EXEC%20xp_cmdshell%28%27cat%20..%2F..%2F..%2Fetc%2Fpasswd%27%29%23 msg=Referer header check failed: referer header URL 'https://bwapp.sicra.no/bWAPP/htmli_get.php?firstname\=Kaffe&last' not in Start URL or closure list cn1=3389 cn2=1971 cs1=fw_prf_bwapp cs2=PPE0 cs3=r9KYlAjXXP6wM9OFJIp7iPJLCI40000 cs4=ALERT cs5=2017 act=not blocked
